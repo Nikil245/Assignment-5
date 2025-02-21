@@ -1,0 +1,41 @@
+#include <stdio.h>
+#include <string.h>
+#define MAX 10
+char backStack[MAX][50], forwardStack[MAX][50], current[50];
+int backTop = -1, forwardTop = -1;
+void visit(char url[]) {
+    if (strlen(current) > 0) {
+        strcpy(backStack[++backTop], current);
+    }
+    strcpy(current, url);
+    forwardTop = -1;  
+    printf("Visited: %s\n", current);
+}
+void goBack() {
+    if (backTop == -1) {
+        printf("No backward history.\n");
+        return;
+    }
+    strcpy(forwardStack[++forwardTop], current);
+    strcpy(current, backStack[backTop--]);
+    printf("Current Page: %s\n", current);
+}
+void goForward() {
+    if (forwardTop == -1) {
+        printf("No forward history.\n");
+        return;
+    }
+    strcpy(backStack[++backTop], current);
+    strcpy(current, forwardStack[forwardTop--]);
+    printf("Current Page: %s\n", current);
+}
+int main() {
+    visit("google.com");
+    visit("github.com");
+    visit("stackoverflow.com");
+    printf("\nAction: Go Back\n");
+    goBack();
+    printf("\nAction: Go Forward\n");
+    goForward();
+    return 0;
+}
